@@ -11,6 +11,9 @@
 		<class>posjava.persistence.entities.EmpregadoPropertyAccess</class>
 		<class>posjava.persistence.entities.EmpregadoMixedAccess</class>
 		<class>posjava.persistence.entities.Empregado</class>
+		<class>posjava.persistence.entities.Departamento</class>
+		<class>posjava.persistence.entities.Garagem</class>
+		<class>posjava.persistence.entities.Projeto</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"   value="com.mysql.jdbc.Driver"/>
 	      	<property name="javax.persistence.jdbc.url"      value="jdbc:mysql://localhost:3306/posjava?zeroDateTimeBehavior=convertToNull"/>
