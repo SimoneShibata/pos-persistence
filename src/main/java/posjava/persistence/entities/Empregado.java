@@ -94,4 +94,12 @@ public class Empregado {
 		this.garagem = garagem;
 	}
 
+	public Collection<Projeto> getProjetos() {
+		return projetos;
+	}
+
+	public void setProjetos(Collection<Projeto> projetos) {
+		this.projetos = projetos;
+	}
+
 }
