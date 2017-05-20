@@ -2,6 +2,7 @@ package posjava.persistence;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import javax.persistence.EntityManager;
@@ -63,12 +64,14 @@ public class Exemplo2 {
 		transaction4.commit();
 		// --- TERMINO DA TRANSAÇÃO
 
-		// --- INICIO DA TRANSAÇÃO
-		EntityTransaction transaction5 = em.getTransaction();
-		transaction5.begin();
-		// Adicionar cada empregado a um projeto
-		transaction5.commit();
-		// --- TERMINO DA TRANSAÇÃO
+		List<Empregado> empregados = em.createQuery("from Empregado e").getResultList();
+		System.out.println("<< -- TABELA EMPREGADOS -- >>");
+		empregados.forEach(empregado -> System.out.println(String.format("Empregado > %10s - %3s - %15s - %15s", empregado.getNome(), empregado.getGaragem().getLocalizacao(), empregado.getDepartamento().getNome(), empregado.getProjetos().stream().findFirst().get().getNome())));
+
+		List<Garagem> garagens = em.createQuery("from Garagem g").getResultList();
+		System.out.println("<< -- TABELA GARAGEM -- >>");
+		garagens.forEach(garagem -> System.out.println(String.format("Garagem > %3d - %3s", garagem.getNumero(), garagem.getLocalizacao())));
+	
 	}
 
 	private static void criaAssociacaoEmpregadoProjeto(EntityManager em) {
@@ -78,18 +81,29 @@ public class Exemplo2 {
 			System.out.println(String.format("EMPREGADO findOne de %d", i));
 
 			Random r = new Random();
-			Projeto projeto = em.find(Projeto.class,
-					Long.parseLong(String.format("%d", r.nextInt(5) + 1)));
-			System.out.println(String.format("DEPARTAMENTO findOne de %d",
-					r.nextInt(5) + 1));
+			int idProjeto1 = r.nextInt(5) + 1;
+			Projeto projeto1 = em.find(Projeto.class,
+					Long.parseLong(String.format("%d", idProjeto1)));
+			System.out.println(String.format("PROJETO findOne de %d",
+					idProjeto1));
+
+			int idProjeto2 = r.nextInt(5) + 1;
+			while (idProjeto2 == idProjeto1) {
+				idProjeto2 = r.nextInt(5) + 1;
+			}
+			Projeto projeto2 = em.find(Projeto.class,
+					Long.parseLong(String.format("%d", idProjeto2)));
+			System.out.println(String.format("PROJETO findOne de %d", idProjeto2));
 
 			Collection<Projeto> projetos = new ArrayList<Projeto>();
-			projetos.add(projeto);
+			projetos.add(projeto1);
+			projetos.add(projeto2);
 			Collection<Empregado> empregados = new ArrayList<Empregado>();
 			empregados.add(empregado);
 
 			empregado.setProjetos(projetos);
-			projeto.setEmpregados(empregados);
+			projeto1.setEmpregados(empregados);
+			projeto2.setEmpregados(empregados);
 			em.persist(empregado);
 
 		}
