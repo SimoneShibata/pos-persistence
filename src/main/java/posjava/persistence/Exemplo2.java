@@ -1,6 +1,7 @@
 package posjava.persistence;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,6 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import posjava.persistence.entities.Departamento;
 import posjava.persistence.entities.Empregado;
 import posjava.persistence.entities.Garagem;
 import posjava.persistence.entities.Projeto;
@@ -42,9 +44,9 @@ public class Exemplo2 {
 		
 		for (int i = 1; i <= 4; i++) {
 			// Criar 4 departamentos
-			Projeto projeto = new Projeto();
-			projeto.setNome("DEPARTAMENTO " + i);
-			em.persist(projeto);
+			Departamento departamento = new Departamento();
+			departamento.setNome("DEPARTAMENTO " + i);
+			em.persist(departamento);
 		}
 		
 		for (int i = 1; i <= 8; i++) {
@@ -81,8 +83,26 @@ public class Exemplo2 {
 		}
 		tx2.commit();
 		// --- TERMINO DA TRANSAÇÃO
-
+		
+		// --- INICIO DA TRANSAÇÃO
+		EntityTransaction tx3 = em.getTransaction();
+		tx3.begin();
 		// Adicionar cada empregado a um departamento
+		for (int i = 1; i <= 10; i++) {
+			Empregado empregado = em.find(Empregado.class, Long.parseLong(i+""));
+			System.out.println(String.format("EMPREGADO findOne de %d", Long.parseLong(i+"")));
+			
+			Random r = new Random();
+			Departamento departamento = em.find(Departamento.class, Long.parseLong(String.format("%d", r.nextInt(4))));
+			System.out.println(String.format("DEPARTAMENTO findOne de %d", r.nextInt(4)));
+			
+			empregado.setDepartamento(departamento);
+			em.persist(empregado);
+			
+		}
+		tx3.commit();
+		// --- TERMINO DA TRANSAÇÃO
+
 		// Adicionar cada empregado a um projeto
 		
 		
