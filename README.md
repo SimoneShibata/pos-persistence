@@ -8,3 +8,4 @@ Para mais detalhes acesse o [site da aula](https://emorgado.github.io/unicesumar
 
 projeto maven
 criar schema "posjava" no banco mysql 
+maven build > goals > clean compile
