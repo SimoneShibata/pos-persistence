@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import posjava.persistence.entities.Departamento;
 import posjava.persistence.entities.Empregado;
@@ -71,7 +72,13 @@ public class Exemplo2 {
 		List<Garagem> garagens = em.createQuery("from Garagem g").getResultList();
 		System.out.println("<< -- TABELA GARAGEM -- >>");
 		garagens.forEach(garagem -> System.out.println(String.format("Garagem > %3d - %3s", garagem.getNumero(), garagem.getLocalizacao())));
-	
+		
+		// Buscar todos os empregados que estão no departamento 1
+		System.out.println("<< -- Departamento 1 -- >>");
+		Query buscaEmpregadosDepartamento1 = em.createQuery("from Empregado e where e.departamento.id = 1");
+		List<Empregado> empregadosDepartamento1 = buscaEmpregadosDepartamento1.getResultList();
+		empregadosDepartamento1.forEach(emp -> System.out.println(emp.getNome()));
+
 	}
 
 	private static void criaAssociacaoEmpregadoProjeto(EntityManager em) {
